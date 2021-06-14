@@ -71,6 +71,7 @@ table tbody tr td:last-child {
 
 .date-col-header {
     text-align: left;
+    width: 100px;
 }
 
 tr {

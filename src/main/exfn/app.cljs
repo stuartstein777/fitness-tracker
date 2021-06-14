@@ -64,8 +64,23 @@
            [:td (helpers/to-time-str total-time)]
            [:td (helpers/to-time-str avg)]]))]]]])
 
+;; weight / bmi table
 (defn weight-table [weight-days]
-  
+  (js/console.log weight-days)
+  [:div
+   [:div.table-responsive
+    [:table.table.table-hover.table-sm
+     [:thead
+      [:tr
+       [:th.date-col-header "Day"]
+       [:th.date "Weight"]
+       [:th.date "BMI"]]]
+     [:tbody
+      (for [{:keys [date weight]} weight-days]
+        [:tr
+         [:td.date-col (.toLocaleDateString date)]
+         [:td (gstring/format "%.2f" weight)]
+         [:td (gstring/format "%.2f" (helpers/calc-bmi 1.75 weight))]])]]]]
   )
 
 ;; App
@@ -74,14 +89,15 @@
         current-weight (helpers/get-current-weight-from-stats days)
         days (->> daily-stats
                   :days
+                  (remove #(= [] (:laps %)))
                   (map (fn [{:keys [date laps]}]
                          {:date   (js/Date. date)
                           :laps   laps}))
                   (sort-by :date <))
-        weight-days (->> :daily-stats
+        weight-days (->> daily-stats
                          :days
                          (map (fn [{:keys [date weight]}]
-                                {:date date
+                                {:date (js/Date. date)
                                  :weight weight}))
                          (sort-by :date <))]
     [:div.container
@@ -89,8 +105,9 @@
      [:div.row
       [laps days]]
      [:div.row
-      [:div.col.col-lg-9
+      [:div.col.col-lg-3
        [weight-table weight-days]]
+      [:div.col.col-lg-6]
       [:div.col.col-lg-3
        [weight-tracker target-weight current-weight]]]]))
 
