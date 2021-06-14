@@ -80,8 +80,7 @@
         [:tr
          [:td.date-col (.toLocaleDateString date)]
          [:td (gstring/format "%.2f" weight)]
-         [:td (gstring/format "%.2f" (helpers/calc-bmi 1.75 weight))]])]]]]
-  )
+         [:td (gstring/format "%.2f" (helpers/calc-bmi 1.75 weight))]])]]]])
 
 ;; App
 (defn app []
