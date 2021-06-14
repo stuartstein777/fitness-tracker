@@ -38,46 +38,46 @@
         [bmi-widget bmi]]]]]))
 
 ;; The lap timer widgets
-(defn laps []
-  (let [days (->> @(rf/subscribe [:daily-stats])
+(defn laps [days]
+  [:div
+   [:div.table-responsive
+    [:table.table.table-hover.table-sm
+     [:thead
+      [:tr
+       [:th.date-col-header "Day"]
+       (for [lap-no (range 1 11)]
+         [:th (str "Lap " lap-no)])
+       [:th "Total Time"]
+       [:th "Avg Lap"]]]
+     [:tbody
+      (for [{:keys [date laps]} days]
+        (let [laps (sort-by :lap laps)
+              total-time (->> laps
+                              (map :time-ms)
+                              (reduce +))
+              avg (->> (/ total-time 10)
+                       (Math/floor))]
+          [:tr
+           [:td.date-col (.toLocaleDateString date)]
+           (for [lap laps]
+             [:td (:time lap)])
+           [:td (helpers/to-time-str total-time)]
+           [:td (helpers/to-time-str avg)]]))]]]])
+
+;; App
+(defn app []
+  (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
+        current-weight (helpers/get-current-weight-from-stats days)
+        days (->> @(rf/subscribe [:daily-stats])
                   :days
                   (map (fn [{:keys [date laps]}]
                          {:date   (js/Date. date)
                           :laps   laps}))
                   (sort-by :date <))]
-    [:div
-     [:div.table-responsive
-      [:table.table.table-hover.table-sm
-       [:thead
-        [:tr
-         [:th.date-col-header "Day"]
-         (for [lap-no (range 1 11)]
-           [:th (str "Lap " lap-no)])
-         [:th "Total Time"]
-         [:th "Avg Lap"]]]
-       [:tbody
-        (for [{:keys [date laps]} days]
-          (let [laps (sort-by :lap laps)
-                total-time (->> laps
-                                (map :time-ms)
-                                (reduce +))
-                avg (->> (/ total-time 10)
-                         (Math/floor))]
-            [:tr
-             [:td.date-col (.toLocaleDateString date)]
-             (for [lap laps]
-               [:td (:time lap)])
-             [:td (helpers/to-time-str total-time)]
-             [:td (helpers/to-time-str avg)]]))]]]]))
-
-;; App
-(defn app []
-  (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
-        current-weight (helpers/get-current-weight-from-stats days)]
     [:div.container
      [:h1 "Fitness Tracker"]
      [:div.row
-      [laps]]
+      [laps days]]
      [:div.row
       [:div.col.col-lg-3
        [weight-tracker target-weight current-weight]]
