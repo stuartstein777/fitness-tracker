@@ -62,7 +62,7 @@ table tbody tr td:first-child {
 }
 
 table tbody tr td:last-child {
-    background-color: #5e81ac;
+    background-color: #426188;
  }
 
 .date-col {
@@ -71,4 +71,8 @@ table tbody tr td:last-child {
 
 .date-col-header {
     text-align: left;
+}
+
+tr {
+    border-bottom: #7a7d81;
 }
