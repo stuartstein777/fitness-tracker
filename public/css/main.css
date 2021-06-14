@@ -1,3 +1,30 @@
+/*
+#8fbcbb
+#88c0d0
+#81a1c1
+#5e81ac
+
+#d8dee9
+#e5e9f0
+#eceff4
+
+#2e3440
+#3b4252
+#434c5e
+#4c566a
+
+#bf616a
+#d08770
+#ebcb8b
+#a3be8c
+#b48ead
+*/
+@media (min-width: 1200px) {
+    .container{
+        max-width: 1200px;
+    }
+}
+
 body {
     background-color: #2e3440;
     color: #d8dee9;
@@ -12,7 +39,36 @@ h1 {
     margin:10px;
 }
 
-.laps-container {
-    background-color: #434c5e;
+
+.table {
+    background: #434c5e;
     border: 2px solid #eceff4;
+    color: #eceff4;
+    padding: 5px;
+    text-align: right;
+}
+
+table.table-hover tbody tr:hover {
+    background-color: #3b4252; 
+    color: #eceff4;
+}
+
+thead {
+    background-color: #2e3440;
+}
+
+table tbody tr td:first-child {
+   background-color: #2e3440;
+}
+
+table tbody tr td:last-child {
+    background-color: #5e81ac;
+ }
+
+.date-col {
+    text-align: left;
+}
+
+.date-col-header {
+    text-align: left;
 }

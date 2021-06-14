@@ -7,7 +7,6 @@
             [exfn.helpers :as helpers]))
 
 ;; The Weight / BMI widgets
-
 (defn bmi-widget [bmi]
   [:div.bmi
    [:div.row.bmi-container
@@ -22,7 +21,7 @@
   (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
         current-weight (helpers/get-current-weight-from-stats days)
         bmi (helpers/calc-bmi 1.75 current-weight)]
-    [:div {:style {:width "100%" :padding 0 :margin 0}}
+    [:div
      [:div.weight
       [:div.row.weight-row
        [:div.col.col-md-9  "Current Weight"]
@@ -42,20 +41,47 @@
 
 ;; The lap timer widgets
 (defn laps []
-  (let [{:keys [days]} @(rf/subscribe [:daily-stats])]
-    [:div.laps-container
-     
-     ]))
+  (let [days (->> @(rf/subscribe [:daily-stats])
+                  :days
+                  (map (fn [{:keys [date laps]}]
+                         {:date   (js/Date. date)
+                          :laps   laps}))
+                  (sort-by :date <))]
+    [:div
+     [:div.table-responsive
+      [:table.table.table-hover.table-sm
+       [:thead
+        [:tr
+         [:th.date-col-header "Day"]
+         (for [lap-no (range 1 11)]
+           [:th (str "Lap " lap-no)])
+         [:th "Total Time"]
+         [:th "Avg Lap"]]]
+       [:tbody
+        (for [{:keys [date laps]} days]
+          (let [laps (sort-by :lap laps)
+                total-time (->> laps
+                                (map :time-ms)
+                                (reduce +))
+                avg (->> (/ total-time 10)
+                         (Math/floor))]
+            [:tr
+             [:td.date-col (.toLocaleDateString date)]
+             (for [lap laps]
+               [:td (:time lap)])
+             [:td (helpers/to-time-str total-time)]
+             [:td (helpers/to-time-str avg)]]))]]]]))
 
 ;; App
 (defn app []
   [:div.container
    [:h1 "Fitness Tracker"]
    [:div.row
-    [:div.col.col-lg-9
-     [laps]]
+    [laps]]
+   [:div.row
     [:div.col.col-lg-3
-     [weight-tracker]]]])
+     [weight-tracker]]
+    [:div.col.col-lg-9]]])
 
 ;; -- After-Load -----------------------------------------------------
 ;; Do this after the page has loaded.
