@@ -64,24 +64,35 @@
            [:td (helpers/to-time-str total-time)]
            [:td (helpers/to-time-str avg)]]))]]]])
 
+(defn weight-table [weight-days]
+  
+  )
+
 ;; App
 (defn app []
-  (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
+  (let [{:keys [target-weight days] :as daily-stats} @(rf/subscribe [:daily-stats])
         current-weight (helpers/get-current-weight-from-stats days)
-        days (->> @(rf/subscribe [:daily-stats])
+        days (->> daily-stats
                   :days
                   (map (fn [{:keys [date laps]}]
                          {:date   (js/Date. date)
                           :laps   laps}))
-                  (sort-by :date <))]
+                  (sort-by :date <))
+        weight-days (->> :daily-stats
+                         :days
+                         (map (fn [{:keys [date weight]}]
+                                {:date date
+                                 :weight weight}))
+                         (sort-by :date <))]
     [:div.container
      [:h1 "Fitness Tracker"]
      [:div.row
       [laps days]]
      [:div.row
+      [:div.col.col-lg-9
+       [weight-table weight-days]]
       [:div.col.col-lg-3
-       [weight-tracker target-weight current-weight]]
-      [:div.col.col-lg-9]]]))
+       [weight-tracker target-weight current-weight]]]]))
 
 ;; -- After-Load -----------------------------------------------------
 ;; Do this after the page has loaded.
