@@ -17,10 +17,8 @@
    [:div.indicator.bmi-indicator {:style {:left (str (* (/ (- bmi 15) 20.0) 100) "%")}}
     [:i.fas.fa-sort-up]]])
 
-(defn weight-tracker []
-  (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
-        current-weight (helpers/get-current-weight-from-stats days)
-        bmi (helpers/calc-bmi 1.75 current-weight)]
+(defn weight-tracker [target-weight current-weight]
+  (let [bmi (helpers/calc-bmi 1.75 current-weight)]
     [:div
      [:div.weight
       [:div.row.weight-row
@@ -74,14 +72,16 @@
 
 ;; App
 (defn app []
-  [:div.container
-   [:h1 "Fitness Tracker"]
-   [:div.row
-    [laps]]
-   [:div.row
-    [:div.col.col-lg-3
-     [weight-tracker]]
-    [:div.col.col-lg-9]]])
+  (let [{:keys [target-weight days]} @(rf/subscribe [:daily-stats])
+        current-weight (helpers/get-current-weight-from-stats days)]
+    [:div.container
+     [:h1 "Fitness Tracker"]
+     [:div.row
+      [laps]]
+     [:div.row
+      [:div.col.col-lg-3
+       [weight-tracker target-weight current-weight]]
+      [:div.col.col-lg-9]]]))
 
 ;; -- After-Load -----------------------------------------------------
 ;; Do this after the page has loaded.
