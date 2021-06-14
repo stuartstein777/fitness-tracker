@@ -1,0 +1,61 @@
+.weight {
+    background-color: #434c5e;
+    border: 2px solid #eceff4;
+    border-radius: 15px;
+    padding: 10px;
+}
+
+.weight-value {
+    text-align: right;
+}
+
+.weight-row {
+    box-shadow: -2px 2px 1px -2px #d8dee9;
+}
+
+.bmi {
+    font-size: 0.75em;
+    padding-top: 10px;
+}
+
+.bmi-container{
+    border: 1px solid #d8dee9;
+    height: 35px;
+    margin: 5px;
+}
+
+.bmi-underweight {
+    background-color: pink;
+    color: #2e3440;
+    padding-left: 3px;
+    text-align: left;
+}
+
+.bmi-normal {
+    background-color: green;
+    padding-left: 3px;
+    text-align: left;
+}
+
+.bmi-overweight {
+    background-color: orange;
+    color: #2e3440;
+    margin: 0;
+    padding-left: 3px;
+    text-align: left;
+}
+
+.bmi-obese {
+    background-color: red;
+    padding-left: 3px;
+    text-align: left;
+}
+
+.bmi-indicator {
+    margin-bottom: 0px;
+    margin-top: -10px;
+    color: #d8dee9;
+    font-size: 2em;
+    padding: 0;
+    position: relative;
+}
