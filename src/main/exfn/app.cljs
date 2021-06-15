@@ -90,14 +90,14 @@
    [:text {:key (str "lax-" 4) :x 20 :y 170 :fill :black} "80"]
    [:text {:key (str "lax-" 5) :x 20 :y 110 :fill :black} "90"]
    [:text {:key (str "lax-" 6) :x 10 :y 50 :fill :black} "100"]
-   [:text {:key (str "lax-" 1) :x 20 :y 350 :fill :black} "50"]
-   [:line {:key (str "lax-" 7) :x1 50 :y1 50 :x2 50 :y2 350 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 8) :x1 40 :y1 50 :x2 51 :y2 50 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 9) :x1 40 :y1 110 :x2 51 :y2 110 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 10) :x1 40 :y1 170 :x2 51 :y2 170 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 11) :x1 40 :y1 230 :x2 51 :y2 230 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 12) :x1 40 :y1 290 :x2 51 :y2 290 :stroke :black :stroke-width 2}]
-   [:line {:key (str "lax-" 13) :x1 40 :y1 350 :x2 51 :y2 350 :stroke :black :stroke-width 2}]])
+   [:text {:key (str "lax-" 7) :x 20 :y 350 :fill :black} "50"]
+   [:line {:key (str "lax-" 8) :x1 50 :y1 50 :x2 50 :y2 350 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 9) :x1 40 :y1 50 :x2 51 :y2 50 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 10) :x1 40 :y1 110 :x2 51 :y2 110 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 11) :x1 40 :y1 170 :x2 51 :y2 170 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 12) :x1 40 :y1 230 :x2 51 :y2 230 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 13) :x1 40 :y1 290 :x2 51 :y2 290 :stroke :black :stroke-width 2}]
+   [:line {:key (str "lax-" 14) :x1 40 :y1 350 :x2 51 :y2 350 :stroke :black :stroke-width 2}]])
 
 (defn right-axis []
   [[:line {:key (str "rax-" 1) :x1 529 :y1 50 :x2 540 :y2 50 :stroke :black :stroke-width 2}]
@@ -113,23 +113,14 @@
    [:text {:key (str "rax-" 11) :x 545 :y 50 :fill :black} "35"]])
 
 (defn horizontal-grid []
-  [[:line {:key (str "laxh-" 1) :x1 50 :x2 530 :y1 350 :y2 350 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 2) :x1 50 :x2 530 :y1 320 :y2 320 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 3) :x1 50 :x2 530 :y1 290 :y2 290 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 4) :x1 50 :x2 530 :y1 260 :y2 260 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 5) :x1 50 :x2 530 :y1 230 :y2 230 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 6) :x1 50 :x2 530 :y1 200 :y2 200 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 7) :x1 50 :x2 530 :y1 170 :y2 170 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 8) :x1 50 :x2 530 :y1 140 :y2 140 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 9) :x1 50 :x2 530 :y1 110 :y2 110 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 10) :x1 50 :x2 530 :y1 80 :y2 80 :stroke "#81a1c1" :stroke-width 0.5}]
-   [:line {:key (str "laxh-" 11) :x1 50 :x2 530 :y1 50 :y2 50 :stroke "#81a1c1" :stroke-width 0.5}]])
+  (for [y (->> (range 50 365 15))]
+    [:line {:key (str "laxh-" y) :x1 50 :x2 530 :y1 y :y2 y :stroke "#81a1c1" :stroke-width 0.5}]))
 
 (defn to-weight-coords [v]
   (- 350 (* 300 (/ (- v 50) 50))))
 
 (defn to-bmi-coords [v]
-  (- 350 (* 300 (/ (- v 15) 50))))
+  (- 350 (* 300 (/ (- v 15) 20))))
 
 (defn legend []
   [[:circle {:key (str "leg-" 1) :cx 60 :cy 375 :r 10 :stroke :black :stroke-width 0 :fill "#bf616a"}]
@@ -138,42 +129,44 @@
    [:text {:key (str "leg-" 4) :x 165 :y 380} "weight"]])
 
 (defn weight-lines [data]
-  (let [measurements (count data)
-        xs (->> (repeat measurements (/ 450 measurements))
-                (reductions + 50)
-                (partition 2 1))
+  (let [cnt (count data)
+        xs (->> (/ 480 cnt)
+                (range 50 531)
+                (butlast))
         ys (->> (map :weight data)
-                (map to-weight-coords)
-                (partition 2 1))
-        coords (map (fn [[x1 x2] [y1 y2]] [[x1 x2] [y1 y2]]) xs ys)]
-    (for [[k [[x1 x2] [y1 y2]]] (helpers/keyed-collection (reverse coords))]
-      [:line {:key (str "bmi-" k) :x1 x1 :x2 x2 :y1 y1 :y2 y2 :stroke "#a3be8c" :stroke-width 3}])))
+                (map to-weight-coords))
+        coords (map (fn [x1 x2 y1 y2] [[x1 y1] [x2 y2]])
+                    (butlast xs)
+                    (rest xs)
+                    (butlast ys)
+                    (rest ys))]
+    (for [[k [[x1 y1] [x2 y2]]] (helpers/keyed-collection coords)]
+      [:line {:key (str "wl-" k) :x1 x1 :x2 x2 :y1 y1 :y2 y2 :stroke "#a3be8c" :stroke-width 3}])))
 
 (defn bmi-lines [data]
-  (let [measurements (count data)
-        xs (->> (repeat measurements (/ 450 measurements))
-                (reductions + 80)
-                (partition 2 1))
+  (let [cnt (count data)
+        xs (->> (/ 480 cnt)
+                (range 50 531)
+                (rest)
+                (reverse))
         ys (->> (map :bmi data)
-                (map to-bmi-coords)
-                (partition 2 1))
-        coords (map (fn [[x1 x2] [y1 y2]] [[x1 x2] [y1 y2]]) xs ys)]
-    (for [[k [[x1 x2] [y1 y2]]] (helpers/keyed-collection coords)]
-      [:line {:key (str "wl-" k) :x1 x1 :x2 x2 :y1 y1 :y2 y2 :stroke "#bf616a" :stroke-width 3}])))
+                (map to-bmi-coords))
+        coords (map (fn [x1 x2 y1 y2] [[x1 y1] [x2 y2]])
+                    (butlast xs)
+                    (rest xs)
+                    (butlast ys)
+                    (rest ys))]
+    (for [[k [[x2 y2] [x1 y1]]] (helpers/keyed-collection coords)]
+      [:line {:key (str "bmi-" k) :x1 x1 :x2 x2 :y1 y1 :y2 y2 :stroke "#bf616a" :stroke-width 3}])))
 
-(defn weight-chart [data] 
+(defn weight-chart [data]
   [:div {:style {:border "2px solid white"
                  :height 400
                  :width 580}}
    [:svg {:style {:background-color "#4c566a"
                   :height "100%"
                   :width "100%"}}
-    (let [bmi-lines (bmi-lines data)]
-      (concat (horizontal-grid) (weight-lines data) (left-axis) (right-axis) (legend) bmi-lines)
-      )]])
-
-
-;float lerp (float v0, float v1, float t) {return (1 - t) * v0 + t * v1; }
+    (concat (horizontal-grid) (bmi-lines data) (weight-lines data) (left-axis) (right-axis) (legend))]])
 
 ;; App
 (defn app []
