@@ -3,10 +3,26 @@
             [ajax.core :as ajax]
             [day8.re-frame.http-fx]))
 
-(rf/reg-event-db
+(rf/reg-fx
+ :draw-chart
+ (fn [data]
+    ))
+
+(rf/dispatch-sync [:dev])
+
+(rf/reg-event-fx
+ :dev
+ (fn [{:keys [db]} _]
+   {:db db
+    :draw-chart nil}))
+
+
+
+(rf/reg-event-fx
  :process
- (fn [db [_ data]]
-   (assoc db :daily-stats data)))
+ (fn [{:keys [db] :as cofx} [_ data]]
+   {:db (assoc db :daily-stats data)
+    :draw-chart data}))
 
 (rf/reg-event-db
  :fail
