@@ -1,5 +1,4 @@
-(ns exfn.helpers
-  (:require [goog.string :as gstring]))
+(ns exfn.helpers)
 
 (defn keyed-collection [col]
   (map vector (iterate inc 0) col))
@@ -20,4 +19,4 @@
   (let [mins (quot ms 60000)
         secs (quot (- ms (* 60000 mins)) 1000)
         ms (- ms (* 60000 mins) (* 1000 secs))]
-    (str mins ":" (gstring/format "%02d" secs) "." (gstring/format "%03d" ms))))
+    (str mins ":" (.padStart (str secs) 2 "0") "." (.padEnd (str ms) 3 "0"))))

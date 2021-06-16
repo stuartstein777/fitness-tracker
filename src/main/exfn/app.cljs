@@ -3,7 +3,6 @@
             [re-frame.core :as rf]
             [exfn.subscriptions]
             [exfn.events]
-            [goog.string :as gstring]
             [exfn.helpers :as helpers]))
 
 ;; The Weight / BMI widgets
@@ -32,11 +31,10 @@
        [:div.col.col-md-3.weight-value (- current-weight target-weight) " kg"]]
       [:div.row
        [:div.col.col-md-9 "BMI"]
-       [:div.col.col-md-3.weight-value (gstring/format "%.2f" bmi)]]
+       [:div.col.col-md-3.weight-value (.toFixed bmi 2)]]
       [:div.row
        [:div.col.col-md-12
         [bmi-widget bmi]]]]]))
-
 
 ;; The lap timer widgets
 (defn laps [days]
@@ -79,8 +77,8 @@
       (for [[k {:keys [bmi date weight]}] (helpers/keyed-collection weight-days)]
         [:tr {:key k}
          [:td.date-col (.toLocaleDateString date)]
-         [:td (gstring/format "%.2f" weight)]
-         [:td (gstring/format "%.2f" bmi)]])]]]])
+         [:td (.toFixed weight 2)]
+         [:td (.toFixed bmi 2)]])]]]])
 
 
 (defn left-axis []
